@@ -17,6 +17,8 @@
     <img alt="Discord" src="https://img.shields.io/discord/803299970169700402?logo=discord&logoColor=white&label=Discord&color=5165f6"></a> -->
 </div>
 
+## This is the development branch
+
 ## ❓ Why does this app exist?
 - The offical DSBmobile app sucks for various reasons (outdated ui, not reliable, just displays a webpage), so i decided to make my own app with an Material You UI, Class Filtering and Displaying content natively.
 
