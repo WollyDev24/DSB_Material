@@ -31,6 +31,8 @@
     <img src="assets/fdroid.png" alt="Get it on Fdroid" height="60" /></a>
 </p>
 
+### if you use Obtainium please turn "Include prereleases" on for now
+
 ## 📂 Project Structure
 
 ```text
