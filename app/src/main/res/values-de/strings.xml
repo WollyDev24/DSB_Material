@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">DSBmaterial</string>
+    <string name="title_main">DSB Material</string>
+    <string name="title_settings">Einstellungen</string>
+    <string name="title_login">DSBmobile Login</string>
+    <string name="title_select_class">Klasse auswählen</string>
+    <string name="title_about">Über DSB Material</string>
+    
+    <string name="action_back">Zurück</string>
+    <string name="action_refresh">Aktualisieren</string>
+    <string name="action_retry">Wiederholen</string>
+    <string name="action_continue">Weiter</string>
+    <string name="action_submit">Absenden</string>
+    <string name="action_logout">Abmelden</string>
+    <string name="action_view_substitutions">Vertretungen anzeigen</string>
+    <string name="action_swap_data">Raum/Typ Daten tauschen</string>
+    <string name="action_switch_class">Klasse wechseln</string>
+    
+    <string name="label_username">Benutzername</string>
+    <string name="label_password">Passwort</string>
+    <string name="label_manual_class">Manuelle Eingabe (z.B. 10a)</string>
+    <string name="label_preferences">Präferenzen</string>
+    <string name="label_account">Konto</string>
+    <string name="label_period_short">Stunde</string>
+    <string name="label_subject_short">Fach</string>
+    <string name="label_room">Raum</string>
+    <string name="label_type">Art</string>
+    <string name="label_dynamic_color">Dynamische Farben</string>
+    <string name="label_sort_period">Nach Stunde sortieren</string>
+    <string name="label_about">Über</string>
+    
+    <string name="desc_select_class">Wähle deine Klasse aus der Liste oder gib sie manuell ein.</string>
+    <string name="desc_swap_default">Standard-Zuordnung</string>
+    <string name="desc_swap_active">Raum und Typ Werte vertauscht</string>
+    <string name="desc_switch_class">Anderen Klassenfilter wählen</string>
+    <string name="desc_logout">Anmeldedaten entfernen und App zurücksetzen</string>
+    <string name="desc_dynamic_color">Farben deines Hintergrundbildes nutzen (Android 12+)</string>
+    <string name="desc_sort_period">Ordnet Vertretungen chronologisch</string>
+    <string name="desc_about">Version 1.0 • Entwickelt von WollyDev24</string>
+    
+    <string name="msg_no_substitutions">Keine Vertretungen gefunden.</string>
+    <string name="msg_no_classes">Keine Klassen gefunden. Überprüfe deine Zugangsdaten.</string>
+    <string name="msg_login_failed">Anmeldung fehlgeschlagen</string>
+    <string name="msg_unknown_error">Unbekannter Fehler</string>
+    <string name="msg_error">Fehler</string>
+    
+    <string name="format_substitutions_count_one">%1$d Vertretung für diesen Tag</string>
+    <string name="format_substitutions_count_many">%1$d Vertretungen für diesen Tag</string>
+</resources>
