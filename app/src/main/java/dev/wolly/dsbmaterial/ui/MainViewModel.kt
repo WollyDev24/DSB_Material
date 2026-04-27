@@ -54,21 +54,30 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             dataStoreManager.archiveFlow.collect { json ->
                 if (!json.isNullOrEmpty()) {
                     val type = object : TypeToken<List<SubstitutionEntry>>() {}.type
-                    _archive.value = gson.fromJson(json, type)
+                    val entries: List<SubstitutionEntry> = gson.fromJson(json, type)
+                    _archive.value = sortArchive(entries)
                 }
             }
         }
     }
 
-    fun archiveCurrentSubstitutions() {
-        val currentEntries = lastSuccessEntries
-        if (currentEntries.isNotEmpty()) {
+    private fun sortArchive(entries: List<SubstitutionEntry>): List<SubstitutionEntry> {
+        return entries.sortedWith(
+            compareBy<SubstitutionEntry> { it.day }
+                .thenBy { it.lesson.filter { c -> c.isDigit() }.toIntOrNull() ?: 999 }
+        )
+    }
+
+    fun archiveSubstitutions(entries: List<SubstitutionEntry>? = null) {
+        val toArchive = entries ?: lastSuccessEntries
+        if (toArchive.isNotEmpty()) {
             viewModelScope.launch {
-                val newArchive = (currentEntries + _archive.value).distinctBy { 
+                val newArchive = (toArchive + _archive.value).distinctBy { 
                     it.day + it.lesson + it.subject + it.room + it.art + it.text 
                 }
-                _archive.value = newArchive
-                dataStoreManager.saveArchive(gson.toJson(newArchive))
+                val sortedArchive = sortArchive(newArchive)
+                _archive.value = sortedArchive
+                dataStoreManager.saveArchive(gson.toJson(sortedArchive))
             }
         }
     }
@@ -213,6 +222,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             val entries = api.getSubstitutions(c)
             lastSuccessEntries = entries
             _uiState.value = UiState.Success(sortEntries(entries))
+            // Auto-archive
+            archiveSubstitutions(entries)
         } catch (e: Exception) {
             _uiState.value = UiState.Error(e.message ?: "Unknown error")
         }

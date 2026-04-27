@@ -88,9 +88,6 @@ fun DSBApp(viewModel: MainViewModel) {
                 },
                 actions = {
                     if (selectedTab == 0 && (uiState is UiState.Success || uiState is UiState.Idle)) {
-                        IconButton(onClick = { viewModel.archiveCurrentSubstitutions() }) {
-                            Icon(Icons.Default.Archive, contentDescription = "Archive current")
-                        }
                         IconButton(onClick = { viewModel.fetchData() }) {
                             Icon(Icons.Default.Refresh, contentDescription = stringResource(R.string.action_refresh))
                         }
@@ -104,25 +101,81 @@ fun DSBApp(viewModel: MainViewModel) {
         },
         bottomBar = {
             if (uiState !is UiState.NeedsLogin && uiState !is UiState.Loading && uiState !is UiState.SelectingClass) {
-                NavigationBar {
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.Home, contentDescription = null) },
-                        label = { Text(stringResource(R.string.title_main)) },
-                        selected = selectedTab == 0,
-                        onClick = { viewModel.setTab(0) }
-                    )
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.Archive, contentDescription = null) },
-                        label = { Text(stringResource(R.string.label_archive)) },
-                        selected = selectedTab == 1,
-                        onClick = { viewModel.setTab(1) }
-                    )
-                    NavigationBarItem(
-                        icon = { Icon(Icons.Default.Settings, contentDescription = null) },
-                        label = { Text(stringResource(R.string.title_settings)) },
-                        selected = selectedTab == 2,
-                        onClick = { viewModel.setTab(2) }
-                    )
+                Surface(
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp, vertical = 24.dp)
+                        .fillMaxWidth(),
+                    shape = androidx.compose.foundation.shape.CircleShape,
+                    color = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
+                    tonalElevation = 3.dp,
+                    shadowElevation = 8.dp
+                ) {
+                    NavigationBar(
+                        containerColor = androidx.compose.ui.graphics.Color.Transparent,
+                        modifier = Modifier.height(80.dp),
+                        windowInsets = WindowInsets(0, 0, 0, 0)
+                    ) {
+                        NavigationBarItem(
+                            icon = { 
+                                val scale by animateFloatAsState(
+                                    targetValue = if (selectedTab == 0) 1.25f else 1f,
+                                    animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
+                                    label = "home_scale"
+                                )
+                                Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)) {
+                                    Icon(
+                                        Icons.Default.Home, 
+                                        contentDescription = stringResource(R.string.title_main), 
+                                        modifier = Modifier.size(26.dp).graphicsLayer(scaleX = scale, scaleY = scale)
+                                    )
+                                }
+                            },
+                            selected = selectedTab == 0,
+                            onClick = { viewModel.setTab(0) },
+                            alwaysShowLabel = false,
+                            label = null
+                        )
+                        NavigationBarItem(
+                            icon = { 
+                                val scale by animateFloatAsState(
+                                    targetValue = if (selectedTab == 1) 1.25f else 1f,
+                                    animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
+                                    label = "archive_scale"
+                                )
+                                Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)) {
+                                    Icon(
+                                        Icons.Default.Archive, 
+                                        contentDescription = stringResource(R.string.label_archive), 
+                                        modifier = Modifier.size(26.dp).graphicsLayer(scaleX = scale, scaleY = scale)
+                                    )
+                                }
+                            },
+                            selected = selectedTab == 1,
+                            onClick = { viewModel.setTab(1) },
+                            alwaysShowLabel = false,
+                            label = null
+                        )
+                        NavigationBarItem(
+                            icon = { 
+                                val scale by animateFloatAsState(
+                                    targetValue = if (selectedTab == 2) 1.25f else 1f,
+                                    animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
+                                    label = "settings_scale"
+                                )
+                                Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)) {
+                                    Icon(
+                                        Icons.Default.Settings, 
+                                        contentDescription = stringResource(R.string.title_settings), 
+                                        modifier = Modifier.size(26.dp).graphicsLayer(scaleX = scale, scaleY = scale)
+                                    )
+                                }
+                            },
+                            selected = selectedTab == 2,
+                            onClick = { viewModel.setTab(2) },
+                            alwaysShowLabel = false,
+                            label = null
+                        )
+                    }
                 }
             }
         }
@@ -186,7 +239,12 @@ fun DSBApp(viewModel: MainViewModel) {
                                 ) {
                                     val dayEntries = state.entries.filter { it.day == selectedDay }
                                     val isExpanded = sheetState.targetValue == SheetValue.Expanded
-                                    SubstitutionViewer(selectedDay!!, dayEntries, isRoomFirst, isExpanded)
+                                    SubstitutionViewer(
+                                        selectedDay!!, 
+                                        dayEntries, 
+                                        isRoomFirst, 
+                                        isExpanded
+                                    )
                                 }
                             }
                         } else if (state is UiState.Error) {
@@ -674,7 +732,12 @@ fun DayList(entries: List<SubstitutionEntry>, onDayClick: (String) -> Unit) {
 }
 
 @Composable
-fun SubstitutionViewer(day: String, entries: List<SubstitutionEntry>, isRoomFirst: Boolean, isExpanded: Boolean) {
+fun SubstitutionViewer(
+    day: String, 
+    entries: List<SubstitutionEntry>, 
+    isRoomFirst: Boolean, 
+    isExpanded: Boolean
+) {
     val headerFontSize by animateFloatAsState(
         targetValue = if (isExpanded) 36f else 22f,
         animationSpec = spring(stiffness = Spring.StiffnessLow),
@@ -706,23 +769,29 @@ fun SubstitutionViewer(day: String, entries: List<SubstitutionEntry>, isRoomFirs
             fontWeight = FontWeight.ExtraBold,
             modifier = Modifier.padding(start = textPaddingStart, top = textPaddingTop, bottom = 16.dp)
         )
+        
         Surface(
-            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
-            shape = MaterialTheme.shapes.large,
+            color = MaterialTheme.colorScheme.surfaceColorAtElevation(2.dp),
+            shape = MaterialTheme.shapes.extraLarge,
             modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
         ) {
-            Row(modifier = Modifier.padding(vertical = 12.dp, horizontal = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-                TableHeaderCell(stringResource(R.string.label_period_short), 1.2f)
+            Row(modifier = Modifier.padding(vertical = 14.dp, horizontal = 20.dp), verticalAlignment = Alignment.CenterVertically) {
+                TableHeaderCell(stringResource(R.string.label_period_short), 1f)
                 TableHeaderCell(stringResource(R.string.label_subject_short), 1.8f)
                 TableHeaderCell(stringResource(R.string.label_room), 1.4f)
                 TableHeaderCell(stringResource(R.string.label_type), 2f)
             }
         }
-        Spacer(Modifier.height(12.dp))
-        LazyColumn(modifier = Modifier.fillMaxWidth().weight(1f), contentPadding = PaddingValues(bottom = 48.dp, start = 8.dp, end = 8.dp)) {
+        
+        Spacer(Modifier.height(16.dp))
+        
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth().weight(1f), 
+            contentPadding = PaddingValues(bottom = 100.dp, start = 8.dp, end = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
             items(entries) { entry ->
                 SubstitutionTableRow(entry, isRoomFirst)
-                HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.padding(horizontal = 8.dp))
             }
         }
     }
@@ -730,33 +799,80 @@ fun SubstitutionViewer(day: String, entries: List<SubstitutionEntry>, isRoomFirs
 
 @Composable
 fun RowScope.TableHeaderCell(text: String, weight: Float) {
-    Text(text = text, modifier = Modifier.weight(weight), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
+    Text(
+        text = text, 
+        modifier = Modifier.weight(weight), 
+        style = MaterialTheme.typography.labelMedium, 
+        fontWeight = FontWeight.ExtraBold, 
+        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
+        letterSpacing = 1.sp
+    )
 }
 
 @Composable
-fun SubstitutionTableRow(entry: SubstitutionEntry, isRoomFirst: Boolean) {
+fun SubstitutionTableRow(
+    entry: SubstitutionEntry, 
+    isRoomFirst: Boolean
+) {
     val roomDisplay = if (isRoomFirst) entry.room else entry.art
     val typeDisplay = if (isRoomFirst) entry.art else entry.room
-    Column(modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp, horizontal = 12.dp)) {
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            TableCell(entry.lesson, 1.2f, fontWeight = FontWeight.ExtraBold)
-            TableCell(entry.subject, 1.8f, fontWeight = FontWeight.Bold)
-            TableCell(roomDisplay.ifEmpty { "—" }, 1.4f)
-            TableCell(typeDisplay, 2f, color = MaterialTheme.colorScheme.secondary)
-        }
-        if (entry.text.isNotEmpty()) {
-            Surface(
-                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                shape = MaterialTheme.shapes.medium,
-                modifier = Modifier.padding(top = 8.dp).fillMaxWidth()
-            ) {
-                Text(text = entry.text, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(12.dp), lineHeight = 18.sp)
+    
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.extraLarge,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(1.dp)
+        )
+    ) {
+        Column(modifier = Modifier.padding(20.dp)) {
+            Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                TableCell(entry.lesson, 1f, fontWeight = FontWeight.ExtraBold, style = MaterialTheme.typography.titleLarge)
+                TableCell(entry.subject, 1.8f, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.primary)
+                TableCell(roomDisplay.ifEmpty { "—" }, 1.4f, fontWeight = FontWeight.Bold)
+                TableCell(typeDisplay, 2f, color = MaterialTheme.colorScheme.secondary, fontWeight = FontWeight.Medium)
+            }
+            
+            if (entry.text.isNotEmpty()) {
+                Surface(
+                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f),
+                    shape = MaterialTheme.shapes.large,
+                    modifier = Modifier.padding(top = 12.dp).fillMaxWidth()
+                ) {
+                    Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            Icons.Default.Info, 
+                            contentDescription = null, 
+                            modifier = Modifier.size(16.dp),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = entry.text, 
+                            style = MaterialTheme.typography.bodyMedium, 
+                            lineHeight = 20.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
             }
         }
     }
 }
 
 @Composable
-fun RowScope.TableCell(text: String, weight: Float, fontWeight: FontWeight = FontWeight.Normal, color: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface) {
-    Text(text = text, modifier = Modifier.weight(weight), style = MaterialTheme.typography.bodyMedium, fontWeight = fontWeight, color = color, maxLines = 2)
+fun RowScope.TableCell(
+    text: String, 
+    weight: Float, 
+    fontWeight: FontWeight = FontWeight.Normal, 
+    color: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface,
+    style: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyLarge
+) {
+    Text(
+        text = text, 
+        modifier = Modifier.weight(weight), 
+        style = style, 
+        fontWeight = fontWeight, 
+        color = color, 
+        maxLines = 2
+    )
 }
