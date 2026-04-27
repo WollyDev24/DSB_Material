@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import kotlinx.coroutines.launch
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.clickable
@@ -55,6 +56,7 @@ fun DSBApp(viewModel: MainViewModel) {
     val sortByPeriod by viewModel.sortByPeriod.collectAsState()
     val dynamicColor by viewModel.dynamicColor.collectAsState()
     val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
     var selectedDay by remember { mutableStateOf<String?>(null) }
     var showSheet by remember { mutableStateOf(false) }
 
@@ -135,7 +137,25 @@ fun DSBApp(viewModel: MainViewModel) {
                                 onDismissRequest = { showSheet = false },
                                 sheetState = sheetState,
                                 shape = MaterialTheme.shapes.extraLarge,
-                                dragHandle = { BottomSheetDefaults.DragHandle() }
+                                dragHandle = {
+                                    Box(
+                                        Modifier
+                                            .fillMaxWidth()
+                                            .clickable {
+                                                scope.launch {
+                                                    if (sheetState.currentValue == SheetValue.PartiallyExpanded) {
+                                                        sheetState.expand()
+                                                    } else {
+                                                        sheetState.partialExpand()
+                                                    }
+                                                }
+                                            }
+                                            .padding(top = 16.dp, bottom = 8.dp),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        BottomSheetDefaults.DragHandle()
+                                    }
+                                }
                             ) {
                                 val dayEntries = state.entries.filter { it.day == selectedDay }
                                 SubstitutionViewer(selectedDay!!, dayEntries, isRoomFirst)
@@ -590,7 +610,7 @@ fun DayList(entries: List<SubstitutionEntry>, onDayClick: (String) -> Unit) {
 
 @Composable
 fun SubstitutionViewer(day: String, entries: List<SubstitutionEntry>, isRoomFirst: Boolean) {
-    Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp)) {
+    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp)) {
         Text(text = day, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold, modifier = Modifier.padding(16.dp))
         Surface(
             color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
@@ -605,7 +625,7 @@ fun SubstitutionViewer(day: String, entries: List<SubstitutionEntry>, isRoomFirs
             }
         }
         Spacer(Modifier.height(12.dp))
-        LazyColumn(modifier = Modifier.fillMaxWidth(), contentPadding = PaddingValues(bottom = 48.dp, start = 8.dp, end = 8.dp)) {
+        LazyColumn(modifier = Modifier.fillMaxWidth().weight(1f), contentPadding = PaddingValues(bottom = 48.dp, start = 8.dp, end = 8.dp)) {
             items(entries) { entry ->
                 SubstitutionTableRow(entry, isRoomFirst)
                 HorizontalDivider(thickness = 0.5.dp, color = MaterialTheme.colorScheme.outlineVariant, modifier = Modifier.padding(horizontal = 8.dp))
