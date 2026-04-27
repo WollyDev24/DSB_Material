@@ -158,7 +158,8 @@ fun DSBApp(viewModel: MainViewModel) {
                                 }
                             ) {
                                 val dayEntries = state.entries.filter { it.day == selectedDay }
-                                SubstitutionViewer(selectedDay!!, dayEntries, isRoomFirst)
+                                val isExpanded = sheetState.targetValue == SheetValue.Expanded
+                                SubstitutionViewer(selectedDay!!, dayEntries, isRoomFirst, isExpanded)
                             }
                         }
                     }
@@ -609,9 +610,38 @@ fun DayList(entries: List<SubstitutionEntry>, onDayClick: (String) -> Unit) {
 }
 
 @Composable
-fun SubstitutionViewer(day: String, entries: List<SubstitutionEntry>, isRoomFirst: Boolean) {
-    Column(modifier = Modifier.fillMaxSize().padding(horizontal = 12.dp)) {
-        Text(text = day, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.ExtraBold, modifier = Modifier.padding(16.dp))
+fun SubstitutionViewer(day: String, entries: List<SubstitutionEntry>, isRoomFirst: Boolean, isExpanded: Boolean) {
+    val headerFontSize by animateFloatAsState(
+        targetValue = if (isExpanded) 36f else 22f,
+        animationSpec = spring(stiffness = Spring.StiffnessLow),
+        label = "header_font_size"
+    )
+    val containerPadding by animateDpAsState(
+        targetValue = if (isExpanded) 8.dp else 12.dp,
+        animationSpec = spring(stiffness = Spring.StiffnessLow),
+        label = "container_padding"
+    )
+    val textPaddingStart by animateDpAsState(
+        targetValue = if (isExpanded) 12.dp else 16.dp,
+        animationSpec = spring(stiffness = Spring.StiffnessLow),
+        label = "text_padding_start"
+    )
+    val textPaddingTop by animateDpAsState(
+        targetValue = if (isExpanded) 8.dp else 16.dp,
+        animationSpec = spring(stiffness = Spring.StiffnessLow),
+        label = "text_padding_top"
+    )
+
+    Column(modifier = Modifier.fillMaxSize().padding(horizontal = containerPadding)) {
+        Text(
+            text = day,
+            style = MaterialTheme.typography.headlineLarge.copy(
+                fontSize = headerFontSize.sp,
+                lineHeight = (headerFontSize * 1.2f).sp
+            ),
+            fontWeight = FontWeight.ExtraBold,
+            modifier = Modifier.padding(start = textPaddingStart, top = textPaddingTop, bottom = 16.dp)
+        )
         Surface(
             color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f),
             shape = MaterialTheme.shapes.large,
