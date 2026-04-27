@@ -78,10 +78,13 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 5. Open a Pull Request
 
 ## ⭐ Special Thanks to
-- [Tenner/dsbmobile](https://github.com/Tenner/dsbmobile) - Understanding of the API
+- [Tenner/dsbmobile](https://github.com/Tenner/dsbmobile) - Understanding and usage of the API
 
 ## 📄 License
 
 This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
 
 ---
+<p align="center">
+  Made with ❤️ by <a href="https://github.com/wollydev24">WollyDev24</a>
+</p>
