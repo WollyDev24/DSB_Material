@@ -13,7 +13,7 @@
     <string name="action_submit">Submit</string>
     <string name="action_logout">Logout</string>
     <string name="action_view_substitutions">View Substitutions</string>
-    <string name="action_swap_data">Swap Room/Type Data</string>
+    <string name="action_swap_data">Swap Room/Type values</string>
     <string name="action_switch_class">Switch Class</string>
     
     <string name="label_username">Username</string>
@@ -36,7 +36,7 @@
     <string name="desc_logout">Remove credentials and reset app</string>
     <string name="desc_dynamic_color">Use colors from your wallpaper (Android 12+)</string>
     <string name="desc_sort_period">Orders substitutions chronologically</string>
-    <string name="desc_about">Version 1.0-alpha • Developed by WollyDev24</string>
+    <string name="desc_about">Version 1.1-alpha • Developed by WollyDev24</string>
     
     <string name="msg_no_substitutions">No substitutions found.</string>
     <string name="msg_no_classes">No classes found. Check your credentials.</string>
