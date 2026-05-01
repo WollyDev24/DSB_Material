@@ -30,7 +30,7 @@
     <string name="label_about">About</string>
     <string name="label_archive">Archive</string>
     
-    <string name="desc_select_class">Choose your class from the list or enter it manually.</string>
+    <string name="desc_select_class">Choose your class from the list (Because of limitations only classes with Substitiutions are shown, if your class isnt shown, enter it manually)</string>
     <string name="desc_swap_default">Default mapping</string>
     <string name="desc_swap_active">Swapped room and type values</string>
     <string name="desc_switch_class">Choose a different class filter</string>

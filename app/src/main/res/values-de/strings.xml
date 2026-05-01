@@ -30,7 +30,7 @@
     <string name="label_about">Über</string>
     <string name="label_archive">Archiv</string>
     
-    <string name="desc_select_class">Wähle deine Klasse aus der Liste oder gib sie manuell ein.</string>
+    <string name="desc_select_class">Wähle deine Klasse aus der Liste (Wegen einschränkungen werden nur klassen mit vertretungen angezeigt, wenn deine nicht angezeigt wird, gib sie manuell ein)</string>
     <string name="desc_swap_default">Standard-Zuordnung</string>
     <string name="desc_swap_active">Raum und Typ Werte vertauscht</string>
     <string name="desc_switch_class">Anderen Klassenfilter wählen</string>

@@ -103,7 +103,7 @@ fun DSBApp(viewModel: MainViewModel) {
             if (uiState !is UiState.NeedsLogin && uiState !is UiState.Loading && uiState !is UiState.SelectingClass) {
                 Surface(
                     modifier = Modifier
-                        .padding(horizontal = 24.dp, vertical = 24.dp)
+                        .padding(horizontal = 80.dp, vertical = 24.dp)
                         .fillMaxWidth(),
                     shape = androidx.compose.foundation.shape.CircleShape,
                     color = MaterialTheme.colorScheme.surfaceColorAtElevation(3.dp),
@@ -135,26 +135,26 @@ fun DSBApp(viewModel: MainViewModel) {
                             alwaysShowLabel = false,
                             label = null
                         )
-                        NavigationBarItem(
-                            icon = { 
-                                val scale by animateFloatAsState(
-                                    targetValue = if (selectedTab == 1) 1.25f else 1f,
-                                    animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
-                                    label = "archive_scale"
-                                )
-                                Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)) {
-                                    Icon(
-                                        Icons.Default.Archive, 
-                                        contentDescription = stringResource(R.string.label_archive), 
-                                        modifier = Modifier.size(26.dp).graphicsLayer(scaleX = scale, scaleY = scale)
-                                    )
-                                }
-                            },
-                            selected = selectedTab == 1,
-                            onClick = { viewModel.setTab(1) },
-                            alwaysShowLabel = false,
-                            label = null
-                        )
+//                        NavigationBarItem(
+//                            icon = {
+//                                val scale by animateFloatAsState(
+//                                    targetValue = if (selectedTab == 1) 1.25f else 1f,
+//                                    animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessLow),
+//                                    label = "archive_scale"
+//                                )
+//                                Box(contentAlignment = Alignment.Center, modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)) {
+//                                    Icon(
+//                                        Icons.Default.Archive,
+//                                        contentDescription = stringResource(R.string.label_archive),
+//                                        modifier = Modifier.size(26.dp).graphicsLayer(scaleX = scale, scaleY = scale)
+//                                    )
+//                                }
+//                            },
+//                            selected = selectedTab == 1,
+//                            onClick = { viewModel.setTab(1) },
+//                            alwaysShowLabel = false,
+//                            label = null
+//                        )
                         NavigationBarItem(
                             icon = { 
                                 val scale by animateFloatAsState(
@@ -388,7 +388,7 @@ fun SettingsScreen(
                     SettingItem(
                         title = stringResource(R.string.action_logout),
                         description = stringResource(R.string.desc_logout),
-                        icon = Icons.Default.Logout,
+                        icon = Icons.Filled.Logout,
                         iconColor = MaterialTheme.colorScheme.error,
                         onClick = onLogout
                     )
